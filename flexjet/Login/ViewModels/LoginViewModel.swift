@@ -44,7 +44,7 @@ final class LoginViewModel: ObservableObject {
             errorMessage = nil
             try await authRepo.login(username: username, password: password)
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = "We're sorry, that didn't work. Please try again."
         }
     }
 }

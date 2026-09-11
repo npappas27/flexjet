@@ -112,7 +112,7 @@ struct FlightRow: View {
     private var completedCheckmark: some View {
         Image(systemName: isCompleted ? "checkmark.seal.fill" : "checkmark.seal")
             .font(.system(size: 28))
-            .foregroundStyle(isCompleted ? .brandPrimary : .black)
+            .foregroundStyle(isCompleted ? .brandPrimary : .primary)
     }
     
     private func airportName(_ name: String, iata: String) -> String {

@@ -20,12 +20,11 @@ final class FlightsViewModel: ObservableObject {
     
     init() {
         flightStore.$completedIDs
-            .receive(on: DispatchQueue.main)
             .assign(to: &$completedFlightIDs)
     }
     
     func getFlights(refresh: Bool = false) async {
-        if !refresh, state != .idle { return }
+        guard refresh || state == .idle || state == .error else { return }
         do {
             state = .loading
             let flights = try await flightService.getFlights()

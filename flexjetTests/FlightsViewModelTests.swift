@@ -51,7 +51,27 @@ final class FlightsViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state, .error)
         XCTAssertEqual(mockService.getFlightsCallCount, 1)
     }
-    
+
+    func test_getFlights_afterFailure_retries() async {
+        mockService.result = .failure(URLError(.notConnectedToInternet))
+        await viewModel.getFlights()
+
+        mockService.result = .success([])
+        await viewModel.getFlights()
+
+        XCTAssertEqual(viewModel.state, .loaded)
+        XCTAssertEqual(mockService.getFlightsCallCount, 2)
+    }
+
+    func test_getFlights_whenLoaded_doesNotRefetchWithoutRefresh() async {
+        mockService.result = .success([])
+        await viewModel.getFlights()
+
+        await viewModel.getFlights()
+
+        XCTAssertEqual(mockService.getFlightsCallCount, 1)
+    }
+
     func test_organizeFlights_splitsUpcomingAndPastFlights() {
         let past = makeFlight(departure: Date().addingTimeInterval(-3600))
         let upcoming = makeFlight(departure: Date().addingTimeInterval(3600))
