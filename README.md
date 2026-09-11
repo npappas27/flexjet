@@ -9,27 +9,22 @@ A SwiftUI app for signing in and viewing upcoming and past flights.
 - Flight details for past flights, with the option to mark a flight complete (saved on the device)
 - Log out from Profile
 
-## Requirements
+## Implementation notes:
+- Views <-> View Models <-> Repository (as needed) <-> Services
+- Factory for dependency management: this makes registering mock/real implementations silky smooth and works nice with SwiftUI (previews and injecting dependencies)
+- Design system: Built out a couple reusable components using brand colors
+- Persistence: UserDefaults as the quick/naive approach for persistence. Longer term completion states should be stored on API
+- Auth: Keychain for session persistence across cold starts
+- Automated testing: Unit tests cover sign-in and session handling, flight loading, retry and sorting, the completed-flights store, and date formatting. Services are replaced with mocks through the Factory container.
+- With more time: Localize strings, typed reuse for literals (SF symbols), better handling for API endpoints via xcconfig, domain models
 
-- Xcode 26+
-- iOS 26.0+
-- [Factory](https://github.com/hmlongco/Factory) (added through Swift Package Manager)
-
-## Getting Started
-
-1. Open `flexjet.xcodeproj`. Xcode resolves the package dependency automatically.
-2. Build and run the `flexjet` scheme (⌘R).
-3. Sign in with the test credentials from the assignment brief.
+## Time breakdown:
+    - Login screen: 0.5 hours
+    - Flights screen: 2-3 hours
+    - Nice-to-haves: 1 hour
+    - Any additional time spent: 1 hour
 
 ## Architecture
-
-MVVM with SwiftUI. Dependencies are provided by a Factory container.
-
-```
-View ─▶ ViewModel ─▶ Repository / Service ─▶ NetworkService ─▶ API
-                                          └▶ KeychainService
-```
-
 - **Services** (`Auth`, `Flights`, `Networking`, `Keychain`) sit behind protocols, so they can be swapped for test doubles.
 - **`AuthRepository`** publishes the auth token. `RootView` watches it to decide between the login screen and the main tabs, so there's no manual navigation on sign-in or sign-out.
 - **`CompletedFlightsStore`** saves completed flight IDs in `UserDefaults`.
@@ -48,6 +43,3 @@ flexjet/
 └── Services/        Networking, auth, flights, keychain
 ```
 
-## Testing
-
-Unit tests cover sign-in and session handling (`AuthRepository`, `LoginViewModel`), flight loading, retry and sorting (`FlightsViewModel`), the completed-flights store, and date formatting. Services are replaced with mocks through the Factory container. Run the tests with ⌘U.
