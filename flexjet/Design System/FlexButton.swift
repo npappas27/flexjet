@@ -32,3 +32,15 @@ struct FlexButton: View {
         .disabled(isLoading)
     }
 }
+
+#Preview {
+    FlexButton(title: "Continue", isLoading: false) {
+        //
+    }
+}
+
+#Preview {
+    FlexButton(title: "Sign in", isLoading: true) {
+        //
+    }
+}

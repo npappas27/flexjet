@@ -15,3 +15,7 @@ struct AirplaneProgress: View {
             .symbolEffect(.pulse, options: .repeating)
     }
 }
+
+#Preview {
+    AirplaneProgress()
+}
