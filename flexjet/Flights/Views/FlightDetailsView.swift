@@ -104,6 +104,7 @@ struct FlightDetailsView: View {
                 value: flight.price.formatted(.currency(code: "USD"))
             )
         }
+        .timeZoneAware()
     }
 
     private func detailRow(

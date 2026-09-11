@@ -118,6 +118,7 @@ struct FlightsView: View {
                     }
                 }
             }
+            .timeZoneAware()
         }
     }
     
