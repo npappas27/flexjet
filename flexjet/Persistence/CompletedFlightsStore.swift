@@ -5,27 +5,24 @@
 //  Created by Nick Pappas on 9/11/26.
 //
 
+import Combine
 import Foundation
 
-enum CompletedFlightsStore {
-    private static let key = "completedFlightIDs"
+final class CompletedFlightsStore: ObservableObject {
+    @Published private(set) var completedIDs: Set<String> = []
 
-    static var ids: Set<String> {
-        get {
-            Set(UserDefaults.standard.stringArray(forKey: key) ?? [])
-        }
-        set {
-            UserDefaults.standard.set(Array(newValue), forKey: key)
-        }
+    private let key = "completed_flights"
+
+    init() {
+        completedIDs = Set(UserDefaults.standard.stringArray(forKey: key) ?? [])
     }
 
-    static func isCompleted(_ id: String) -> Bool {
-        ids.contains(id)
+    func isCompleted(_ id: String) -> Bool {
+        completedIDs.contains(id)
     }
 
-    static func complete(_ id: String) {
-        var current = ids
-        current.insert(id)
-        ids = current
+    func complete(_ id: String) {
+        completedIDs.insert(id)
+        UserDefaults.standard.set(Array(completedIDs), forKey: key)
     }
 }

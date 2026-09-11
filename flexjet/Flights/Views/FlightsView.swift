@@ -125,7 +125,7 @@ struct FlightsView: View {
         FlightRow(
             flight: flight,
             isUpcoming: viewModel.tabSelection == .upcoming,
-            isCompleted: CompletedFlightsStore.isCompleted(flight.id)
+            isCompleted: viewModel.completedFlightIDs.contains(flight.id)
         )
     }
 }

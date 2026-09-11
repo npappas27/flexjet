@@ -8,41 +8,41 @@
 import FactoryKit
 import Foundation
 
+@MainActor
 extension Container {
-    
-    @MainActor
-    var networkService: Factory<NetworkProtocol> {
-        self { NetworkService(keychain: self.keychain()) }
+    var keychain: Factory<KeychainProtocol> {
+        self { KeychainService() }
             .singleton
     }
 
-    @MainActor
+    var networkService: Factory<NetworkProtocol> {
+        self {
+            NetworkService(keychain: self.keychain())
+        }
+        .singleton
+    }
+
     var authService: Factory<AuthProtocol> {
         self {
             AuthService(network: self.networkService())
         }
         .singleton
     }
-    
-    @MainActor
+
     var flightService: Factory<FlightProtocol> {
         self {
             FlightService(network: self.networkService())
         }
         .singleton
     }
-    
-    @MainActor
+
     var authRepository: Factory<AuthRepository> {
-        self {
-            AuthRepository()
-        }
-        .singleton
+        self { AuthRepository() }
+            .singleton
     }
-    
-    @MainActor
-    var keychain: Factory<KeychainProtocol> {
-        self { KeychainService() }
+
+    var completedFlightsStore: Factory<CompletedFlightsStore> {
+        self { CompletedFlightsStore() }
             .singleton
     }
 }

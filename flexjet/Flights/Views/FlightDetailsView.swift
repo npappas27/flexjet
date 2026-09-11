@@ -9,10 +9,15 @@ import SwiftUI
 
 struct FlightDetailsView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var isCompleted = false
+    @StateObject private var viewModel: FlightDetailsViewModel
     
     let flight: FlightResponse
-
+    
+    init(flight: FlightResponse) {
+        self.flight = flight
+        _viewModel = StateObject(wrappedValue: .init(flightId: flight.id))
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: .zero) {
@@ -25,9 +30,6 @@ struct FlightDetailsView: View {
                     .padding(.top, 16)
             }
             .padding(.horizontal, 24)
-            .onAppear {
-                isCompleted = CompletedFlightsStore.isCompleted(flight.id)
-            }
         }
         .background(Color(.systemBackground))
     }
@@ -123,27 +125,25 @@ struct FlightDetailsView: View {
 
     private var completeButton: some View {
         Button {
-            guard !isCompleted else { return }
-            CompletedFlightsStore.complete(flight.id)
-            isCompleted = true
+            viewModel.completeFlight(id: flight.id)
         } label: {
             HStack(spacing: 8) {
                 Image(systemName: "checkmark.seal.fill")
-                Text(isCompleted ? "Completed" : "Complete")
+                Text(viewModel.isCompleted ? "Completed" : "Complete")
             }
             .font(.subheadline)
             .fontWeight(.semibold)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
-            .foregroundStyle(isCompleted ? .white : .primary)
+            .foregroundStyle(viewModel.isCompleted ? .white : .primary)
             .background {
                 RoundedRectangle(cornerRadius: 6)
-                    .fill(isCompleted ? Color.brandPrimary : Color.clear)
+                    .fill(viewModel.isCompleted ? Color.brandPrimary : Color.clear)
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 6)
                     .stroke(
-                        isCompleted ? Color.clear : Color(.separator),
+                        viewModel.isCompleted ? Color.clear : Color(.separator),
                         lineWidth: 1
                     )
             }

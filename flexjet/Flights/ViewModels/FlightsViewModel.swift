@@ -11,10 +11,18 @@ import Foundation
 
 final class FlightsViewModel: ObservableObject {
     @Injected(\.flightService) var flightService
+    @Injected(\.completedFlightsStore) var flightStore
     @Published var tabSelection: TabSelection = .upcoming
     @Published private(set) var upcomingFlights: [FlightResponse] = []
     @Published private(set) var pastFlights: [FlightResponse] = []
     @Published private(set) var state: ViewState = .idle
+    @Published private(set) var completedFlightIDs: Set<String> = []
+    
+    init() {
+        flightStore.$completedIDs
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$completedFlightIDs)
+    }
     
     func getFlights(refresh: Bool = false) async {
         if !refresh, state != .idle { return }

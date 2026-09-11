@@ -5,31 +5,44 @@
 //  Created by Nick Pappas on 9/11/26.
 //
 
+import FactoryKit
 import Foundation
 import XCTest
 @testable import flexjet
 
+@MainActor
 final class CompletedFlightsStoreTests: XCTestCase {
+    private var sut: CompletedFlightsStore!
 
     override func setUp() {
         super.setUp()
-        CompletedFlightsStore.ids = []
+
+        UserDefaults.standard.removeObject(forKey: "completedFlights")
+        sut = Container.shared.completedFlightsStore()
+    }
+
+    override func tearDown() {
+        Container.shared.completedFlightsStore.reset()
+        UserDefaults.standard.removeObject(forKey: "completedFlights")
+        sut = nil
+
+        super.tearDown()
     }
 
     func test_complete_addsFlightID() {
-        CompletedFlightsStore.complete("flight-123")
+        sut.complete("flight-123")
 
-        XCTAssertTrue(CompletedFlightsStore.isCompleted("flight-123"))
+        XCTAssertTrue(sut.isCompleted("flight-123"))
     }
 
     func test_isCompleted_returnsFalseForUnknownID() {
-        XCTAssertFalse(CompletedFlightsStore.isCompleted("flight-999"))
+        XCTAssertFalse(sut.isCompleted("flight-999"))
     }
 
     func test_complete_doesNotDuplicateIDs() {
-        CompletedFlightsStore.complete("flight-123")
-        CompletedFlightsStore.complete("flight-123")
+        sut.complete("flight-123")
+        sut.complete("flight-123")
 
-        XCTAssertEqual(CompletedFlightsStore.ids.count, 1)
+        XCTAssertEqual(sut.completedIDs.count, 1)
     }
 }
