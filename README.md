@@ -50,4 +50,4 @@ flexjet/
 
 ## Testing
 
-Unit tests cover flight loading and sorting, the completed-flights store, and date formatting. Run them with ⌘U.
+Unit tests cover sign-in and session handling (`AuthRepository`, `LoginViewModel`), flight loading, retry and sorting (`FlightsViewModel`), the completed-flights store, and date formatting. Services are replaced with mocks through the Factory container. Run the tests with ⌘U.

@@ -17,13 +17,13 @@ final class CompletedFlightsStoreTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        UserDefaults.standard.removeObject(forKey: "completedFlights")
+        UserDefaults.standard.removeObject(forKey: "completed_flights")
         sut = Container.shared.completedFlightsStore()
     }
 
     override func tearDown() {
         Container.shared.completedFlightsStore.reset()
-        UserDefaults.standard.removeObject(forKey: "completedFlights")
+        UserDefaults.standard.removeObject(forKey: "completed_flights")
         sut = nil
 
         super.tearDown()

@@ -26,7 +26,7 @@ final class FlightsViewModel: ObservableObject {
     func getFlights(refresh: Bool = false) async {
         guard refresh || state == .idle || state == .error else { return }
         do {
-            state = .loading
+            if !refresh { state = .loading }
             let flights = try await flightService.getFlights()
             organizeFlights(flights)
             state = .loaded
