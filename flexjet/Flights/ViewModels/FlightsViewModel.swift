@@ -16,11 +16,15 @@ final class FlightsViewModel: ObservableObject {
     @Published private(set) var upcomingFlights: [FlightResponse] = []
     @Published private(set) var pastFlights: [FlightResponse] = []
     @Published private(set) var state: ViewState = .idle
-    @Published private(set) var completedFlightIDs: Set<String> = []
-    
+    @Published private var completedFlightIDs: Set<String> = []
+
     init() {
         flightStore.$completedIDs
             .assign(to: &$completedFlightIDs)
+    }
+
+    func isCompleted(_ id: String) -> Bool {
+        flightStore.isCompleted(id)
     }
     
     func getFlights(refresh: Bool = false) async {

@@ -14,7 +14,7 @@ final class FlightDetailsViewModel: ObservableObject {
     @Published private(set) var isCompleted = false
     
     init(flightId: String) {
-        isCompleted = flightStore.completedIDs.contains(flightId)
+        isCompleted = flightStore.isCompleted(flightId)
     }
     
     func completeFlight(id: String) {

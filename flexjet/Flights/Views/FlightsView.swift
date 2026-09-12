@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct FlightsView: View {
     @ObservedObject var viewModel: FlightsViewModel
 
@@ -126,7 +124,7 @@ struct FlightsView: View {
         FlightRow(
             flight: flight,
             isUpcoming: viewModel.tabSelection == .upcoming,
-            isCompleted: viewModel.completedFlightIDs.contains(flight.id)
+            isCompleted: viewModel.isCompleted(flight.id)
         )
     }
 }
